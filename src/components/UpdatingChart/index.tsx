@@ -74,9 +74,6 @@ const UpdatingChart = () => {
     useEffect(() => {
         ws.current = new WebSocket("wss://ws.kraken.com");
         ws.current.onopen = () => {
-            console.log("WebSocket connected!", [
-                `${selectedCoin?.split?.("/")?.[0]}/USD`,
-            ]);
             ws?.current?.send(
                 JSON.stringify({
                     event: "subscribe",
@@ -109,13 +106,8 @@ const UpdatingChart = () => {
             console.error("WebSocket error:", error);
         };
 
-        ws.current.onclose = () => {
-            console.log("WebSocket closed");
-        };
-
         return () => {
             if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-                console.log("Closing WebSocket...");
                 ws.current.close();
             }
         };
@@ -141,11 +133,6 @@ const UpdatingChart = () => {
                             height: 450,
                             type: "candlestick",
                             zoom: { enabled: true },
-                            events: {
-                                zoomed: (...rest) => {
-                                    console.log({ rest });
-                                },
-                            },
                         },
                     }}
                     series={series}
